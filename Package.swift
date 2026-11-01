@@ -13,6 +13,15 @@ let package = Package(
         .executable(name: "corrector", targets: ["corrector"]),
         .executable(name: "CorrectorApp", targets: ["CorrectorApp"]),
     ],
+    // The one external dependency, and it is confined to the app target.
+    // Corrector is distributed outside the App Store, so without an updater
+    // every release asks the user to go back to GitHub and notice. The
+    // libraries below stay dependency-free: `swift test` still fetches
+    // nothing.
+    dependencies: [
+        .package(url: "https://github.com/sparkle-project/Sparkle",
+                 from: "2.8.0"),
+    ],
     targets: [
         .target(name: "CorrectorDelta", swiftSettings: [.swiftLanguageMode(.v5)]),
         .target(name: "CorrectorCore", dependencies: ["CorrectorDelta"], swiftSettings: [.swiftLanguageMode(.v5)]),
@@ -35,8 +44,16 @@ let package = Package(
         .executableTarget(name: "CorrectorApp",
                           dependencies: ["CorrectorAppCore", "CorrectorCore",
                                          "CorrectorEngine", "CorrectorSession",
-                                         "CorrectorDelta"],
-                          swiftSettings: [.swiftLanguageMode(.v5)]),
+                                         "CorrectorDelta",
+                                         .product(name: "Sparkle", package: "Sparkle")],
+                          swiftSettings: [.swiftLanguageMode(.v5)],
+                          // Sparkle ships as a framework that has to live in
+                          // the bundle, so the executable must look there.
+                          // Tools/make-app.sh copies it to Contents/Frameworks.
+                          linkerSettings: [
+                              .unsafeFlags(["-Xlinker", "-rpath",
+                                             "-Xlinker", "@executable_path/../Frameworks"]),
+                          ]),
         .testTarget(name: "CorrectorDeltaTests", dependencies: ["CorrectorDelta"], swiftSettings: [.swiftLanguageMode(.v5)]),
         .testTarget(name: "CorrectorCoreTests", dependencies: ["CorrectorCore"], swiftSettings: [.swiftLanguageMode(.v5)]),
         .testTarget(name: "CorrectorEngineTests", dependencies: ["CorrectorEngine"], swiftSettings: [.swiftLanguageMode(.v5)]),

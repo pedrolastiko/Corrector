@@ -10,6 +10,16 @@ final class StringsTests: XCTestCase {
     private let en = Strings(locale: .english)
     private let fr = Strings(locale: .french)
 
+    func testTheAddButtonIsNotTheAcceptButton() {
+        // They were the same string once, so the settings form said "Accept"
+        // beside a field whose only job is adding a word.
+        for strings in [en, fr] {
+            XCTAssertNotEqual(strings.addToList, strings.accept)
+        }
+        XCTAssertEqual(en.addToList, "Add")
+        XCTAssertEqual(fr.addToList, "Ajouter")
+    }
+
     // MARK: - Login item
 
     func testTheLoginStringsAreTranslatedAndDistinct() {

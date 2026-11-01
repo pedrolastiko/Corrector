@@ -5,7 +5,7 @@ import XCTest
 final class ReleaseTests: XCTestCase {
 
     func testTheDisplayedVersionIsBuiltFromItsParts() {
-        XCTAssertEqual(Release.display, "beta 0.5.1")
+        XCTAssertEqual(Release.display, "beta 5.1.2")
         XCTAssertFalse(Release.version.isEmpty)
     }
 

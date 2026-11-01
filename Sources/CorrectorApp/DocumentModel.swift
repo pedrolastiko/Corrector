@@ -254,6 +254,71 @@ final class DocumentModel: ObservableObject {
         persist()
     }
 
+    // MARK: - Settings
+    //
+    // `Preferences` stays the store; these publish a change so the settings
+    // screen redraws, and re-run the check so the document agrees with the new
+    // decision immediately rather than at the next keystroke.
+
+    /// Bumped whenever a stored preference changes, so SwiftUI redraws lists
+    /// that read `Preferences` directly. Cheaper than mirroring three
+    /// collections into published properties that could then disagree with the
+    /// store they came from.
+    @Published private(set) var settingsRevision = 0
+
+    var dictionaryWords: Set<String> { Preferences.dictionary }
+    var mutedRules: Set<AlertPname> { Preferences.mutedRules }
+    var blockedApplications: Set<String> { Preferences.blockedApplications }
+
+    func addToDictionary(_ word: String) {
+        let updated = SettingsEditing.adding(word, to: Preferences.dictionary)
+        guard updated != Preferences.dictionary else { return }
+        Preferences.dictionary = updated
+        reapplyUserDecisions()
+    }
+
+    func removeFromDictionary(_ words: Set<String>) {
+        guard !words.isEmpty else { return }
+        Preferences.dictionary = Preferences.dictionary.subtracting(words)
+        reapplyUserDecisions()
+    }
+
+    func unmute(_ rules: Set<AlertPname>) {
+        guard !rules.isEmpty else { return }
+        Preferences.mutedRules = Preferences.mutedRules.subtracting(rules)
+        for rule in rules { session.alertStore.unmute(rule: rule) }
+        reapplyUserDecisions()
+    }
+
+    func blockApplication(_ identifier: String) {
+        let trimmed = identifier.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard SettingsEditing.isPlausibleBundleIdentifier(trimmed) else { return }
+        Preferences.blockedApplications = Preferences.blockedApplications.union([trimmed])
+        settingsRevision += 1
+    }
+
+    func unblockApplications(_ identifiers: Set<String>) {
+        guard !identifiers.isEmpty else { return }
+        Preferences.blockedApplications =
+            Preferences.blockedApplications.subtracting(identifiers)
+        settingsRevision += 1
+    }
+
+    func restoreBlockedDefaults() {
+        Preferences.blockedApplications =
+            SettingsEditing.restoringDefaults(in: Preferences.blockedApplications)
+        settingsRevision += 1
+    }
+
+    /// Put the stored dictionary and mute list back into the live session and
+    /// check again, so a word removed in Settings is underlined at once.
+    private func reapplyUserDecisions() {
+        session.alertStore.restore(dictionary: Preferences.dictionary,
+                                   mutedRules: Preferences.mutedRules)
+        settingsRevision += 1
+        checkNow()
+    }
+
     func newDocument() {
         startSession(with: "")
         persist()

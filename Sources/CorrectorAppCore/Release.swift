@@ -10,12 +10,12 @@ import CorrectorSession
 public enum Release {
 
     /// The marketing version: what a person reads.
-    public static let version = "0.5.1"
+    public static let version = "5.1.2"
 
     /// Pre-release stage. Empty once there is nothing to qualify.
     public static let stage = "beta"
 
-    /// "beta 0.5.1" — what the footer shows.
+    /// "beta 5.1.2" — what the footer shows.
     public static var display: String {
         stage.isEmpty ? version : "\(stage) \(version)"
     }
@@ -56,29 +56,28 @@ public enum Release {
     /// implements it.
     public static let notes: [Note] = [
         Note(id: 1, kind: .feature,
-             english: "A button in the toolbar clears the document, next to "
-                    + "Copy. It is disabled while the document is already "
-                    + "empty.",
-             french: "Un bouton dans la barre d’outils efface le document, "
-                   + "à côté de Copier. Il est désactivé quand le document "
-                   + "est déjà vide."),
+             english: "A settings window, at \u{2318},. The personal "
+                    + "dictionary, the muted rules and the applications the "
+                    + "shortcut skips can all be read and changed there \u{2014} "
+                    + "until now they could only be written.",
+             french: "Une fen\u{ea}tre de r\u{e9}glages, par \u{2318},. Le dictionnaire "
+                   + "personnel, les r\u{e8}gles masqu\u{e9}es et les applications que "
+                   + "le raccourci ignore s\u{2019}y lisent et s\u{2019}y modifient \u{2014} "
+                   + "jusqu\u{2019}ici on ne pouvait que les y \u{e9}crire."),
         Note(id: 2, kind: .feature,
-             english: "That clear can be taken back for thirty seconds: the "
-                    + "same button turns into an undo arrow and puts the text "
-                    + "back. Nothing else reaches it — ⌘Z does not undo a "
-                    + "clear.",
-             french: "Cet effacement se reprend pendant trente secondes : le "
-                   + "même bouton devient une flèche de retour et remet le "
-                   + "texte. Rien d’autre ne le rattrape — ⌘Z n’annule pas un "
-                   + "effacement."),
-        Note(id: 3, kind: .feature,
-             english: "Corrector can open at login, from the menu-bar menu. "
-                    + "macOS keeps the switch in System Settings > General > "
-                    + "Login Items, so it can be revoked without the app "
-                    + "running.",
-             french: "Corrector peut s’ouvrir au démarrage, depuis le menu de "
-                   + "la barre de menus. macOS conserve le réglage dans "
-                   + "Réglages > Général > Ouverture, où il peut être révoqué "
-                   + "sans lancer l’application."),
+             english: "Corrector can update itself. Builds carrying an update "
+                    + "feed check for new versions and install them; builds "
+                    + "without one say so instead of pretending.",
+             french: "Corrector peut se mettre \u{e0} jour. Les versions dot\u{e9}es "
+                   + "d\u{2019}un flux cherchent les nouveaut\u{e9}s et les installent ; "
+                   + "celles qui n\u{2019}en ont pas le disent au lieu de faire "
+                   + "semblant."),
+        Note(id: 3, kind: .fix,
+             english: "Adding a word to the dictionary or muting a rule is no "
+                    + "longer a one-way door: both can be undone from the "
+                    + "settings window.",
+             french: "Ajouter un mot au dictionnaire ou masquer une r\u{e8}gle "
+                   + "n\u{2019}est plus sans retour : les deux se d\u{e9}font depuis la "
+                   + "fen\u{ea}tre de r\u{e9}glages."),
     ]
 }

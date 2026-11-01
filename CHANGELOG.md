@@ -4,6 +4,37 @@ Corrector follows its single source of truth: the version shown in the app's
 footer comes from `Sources/CorrectorAppCore/Release.swift`, and the release
 notes in the hover panel are the same list as the one below.
 
+## 5.1.2 — beta
+
+[Download](https://github.com/pedrolastiko/Corrector/releases/tag/v5.1.2-beta)
+(universal binary, Apple silicon and Intel).
+
+### New
+
+- **A settings window**, at ⌘,. Five tabs: general, dictionary, rules,
+  shortcut and updates. The personal dictionary, the muted rules and the
+  applications ⌥⌘C refuses to act in were already stored — they simply had no
+  interface, and could only be read back with `defaults`.
+- **Corrector can update itself**, through Sparkle. A build carrying an update
+  feed and a public key checks for new versions and installs them. A build
+  without them reports that it has no feed rather than offering a button that
+  cannot work.
+
+### Fixed
+
+- **Adding a word to the dictionary and muting a rule are no longer one-way
+  doors.** Both buttons wrote to a store nothing could read back, so a wrong
+  click could not be undone from inside the app. Both are now reversible in
+  the settings window, and the document is re-checked immediately.
+
+### Note on dependencies
+
+Sparkle is the project's first external dependency, and it is confined to the
+app target: the libraries and the test suite still fetch nothing, so
+`swift test` works offline. `swift build` now needs the network once.
+
+---
+
 ## 0.5.1 — beta
 
 [Download](https://github.com/pedrolastiko/Corrector/releases/tag/v0.5.1-beta)

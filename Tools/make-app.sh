@@ -43,7 +43,15 @@ fi
 
 echo "==> Assembling $APP"
 rm -rf "$APP"
-mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
+mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources" "$APP/Contents/Frameworks"
+
+# Sparkle is a framework, and a framework outside Contents/Frameworks is not
+# found at launch — the app would build, sign and then fail to start. The
+# executable is linked with an rpath of @executable_path/../Frameworks for
+# exactly this (see Package.swift).
+SPARKLE="$BIN_DIR/Sparkle.framework"
+[ -d "$SPARKLE" ] || { echo "no Sparkle.framework in $BIN_DIR" >&2; exit 1; }
+cp -R "$SPARKLE" "$APP/Contents/Frameworks/"
 
 cp "$BIN_DIR/CorrectorApp" "$APP/Contents/MacOS/Corrector"
 # Ship the CLI inside the bundle too, so one artefact carries both front ends.
@@ -75,6 +83,18 @@ cat > "$APP/Contents/Info.plist" <<PLIST
     <key>CFBundleIconFile</key>              <string>AppIcon</string>
     <key>CFBundleIconName</key>              <string>AppIcon</string>
     <key>LSMinimumSystemVersion</key>        <string>13.0</string>
+    <!-- Sparkle. Both are empty until the release keys exist, and the app
+         reports "no update feed" rather than offering a button that cannot
+         work. Fill them in from the environment:
+
+           SUFeedURL=https://.../appcast.xml SUPublicEDKey=... ./Tools/make-app.sh
+
+         The private half is generated once by Sparkle's bin/generate_keys and
+         stays in the login keychain of whoever signs releases. It is not in
+         this repository and must never be. -->
+    <key>SUFeedURL</key>                     <string>${SUFeedURL:-}</string>
+    <key>SUPublicEDKey</key>                 <string>${SUPublicEDKey:-}</string>
+    <key>SUEnableAutomaticChecks</key>       <true/>
     <key>NSHighResolutionCapable</key>       <true/>
     <key>NSHumanReadableCopyright</key>
     <string>Corrector. MIT licensed.</string>

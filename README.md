@@ -3,11 +3,11 @@
   <h1>Corrector</h1>
   <p><b>Proofreading that never leaves your Mac.</b></p>
   <p>
-    <a href="https://github.com/pedrolastiko/Corrector/releases/latest"><img src="https://img.shields.io/badge/download-0.5.1%20beta-2E8B7A?style=flat-square" alt="download"></a>
+    <a href="https://github.com/pedrolastiko/Corrector/releases/latest"><img src="https://img.shields.io/badge/download-5.1.2%20beta-2E8B7A?style=flat-square" alt="download"></a>
     <img src="https://img.shields.io/badge/platform-macOS%2013%2B-2F3640?style=flat-square" alt="platform">
     <img src="https://img.shields.io/badge/swift-6.0-F05138?style=flat-square" alt="swift">
     <img src="https://img.shields.io/badge/tests-257%20passing-2E8B7A?style=flat-square" alt="tests">
-    <img src="https://img.shields.io/badge/dependencies-none-5A6572?style=flat-square" alt="dependencies">
+    <img src="https://img.shields.io/badge/dependencies-1%20(Sparkle)-5A6572?style=flat-square" alt="dependencies">
     <img src="https://img.shields.io/badge/network-never-2E8B7A?style=flat-square" alt="offline">
     <a href="LICENSE"><img src="https://img.shields.io/github/license/pedrolastiko/Corrector?style=flat-square&color=8A94A0" alt="licence"></a>
   </p>
@@ -20,7 +20,7 @@ rules you can read. There is no account, no sign-in, no telemetry, and no
 network code anywhere in the project.
 
 > [!NOTE]
-> Corrector is in **beta 0.5.1**. The build is signed but **not notarised**, so
+> Corrector is in **beta 5.1.2**. The build is signed but **not notarised**, so
 > the first launch needs a right-click → **Open** → **Open**. After that it
 > opens normally.
 
@@ -34,7 +34,7 @@ network code anywhere in the project.
 
 ### Download
 
-Grab [**Corrector 0.5.1 beta**](https://github.com/pedrolastiko/Corrector/releases/latest)
+Grab [**Corrector 5.1.2 beta**](https://github.com/pedrolastiko/Corrector/releases/latest)
 — the `.dmg` (3.3 MB), or the `.zip` if you prefer. Both are universal, Apple
 silicon and Intel. Open the image and drag **Corrector** onto **Applications**.
 
@@ -52,7 +52,9 @@ open dist/Corrector.app
 
 `make-app.sh` assembles a real `.app` bundle — Services, menu-bar item, CLI
 inside — in about ten seconds. Requires macOS 13 or later and Xcode 16 or later.
-Nothing is downloaded; the package has no external dependencies.
+The first build fetches Sparkle, the updater, which is the project's only
+external dependency and is used by the app target alone — `swift test` still
+fetches nothing.
 
 ## Permissions
 
@@ -106,6 +108,8 @@ Services menu, where you can see what changed.
 - [x] Readability, reading time and speaking time
 - [x] A one-click clear, with thirty seconds to take it back
 - [x] Opens at login, if you ask it to
+- [x] A settings window for the dictionary, the muted rules and the denylist
+- [x] Updates itself, when the build carries an update feed
 - [x] 14 rule plugins — seven per language — each one switchable on its own
 
 **Languages**

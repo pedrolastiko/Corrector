@@ -132,6 +132,60 @@ public struct Strings {
             : pick("\(count) corrections applied", "\(count) corrections appliquées")
     }
 
+    // Settings
+    public var settings: String        { pick("Settings\u{2026}", "R\u{e9}glages\u{2026}") }
+    public var settingsGeneral: String { pick("General", "G\u{e9}n\u{e9}ral") }
+    public var settingsChecks: String  { pick("Checks", "V\u{e9}rifications") }
+    public var settingsDictionary: String { pick("Dictionary", "Dictionnaire") }
+    public var settingsRules: String   { pick("Rules", "R\u{e8}gles") }
+    public var settingsShortcut: String { pick("Shortcut", "Raccourci") }
+    public var settingsUpdates: String { pick("Updates", "Mises \u{e0} jour") }
+
+    public var addWord: String         { pick("Add a word\u{2026}", "Ajouter un mot\u{2026}") }
+    public var remove: String          { pick("Remove", "Retirer") }
+    /// Not `accept`: that one means "take this suggestion", and reusing it
+    /// on a form button made the settings screen say "Accept" under a text
+    /// field where the only thing to accept is a word you just typed.
+    public var addToList: String       { pick("Add", "Ajouter") }
+    public var restoreDefaults: String { pick("Restore defaults", "R\u{e9}tablir les valeurs par d\u{e9}faut") }
+    public var emptyDictionary: String {
+        pick("No words yet. Words you add from a suggestion card appear here.",
+             "Aucun mot pour l\u{2019}instant. Les mots ajout\u{e9}s depuis une carte appara\u{ee}tront ici.")
+    }
+    public var emptyMutedRules: String {
+        pick("No rules muted. Rules you mute from a suggestion card appear here.",
+             "Aucune r\u{e8}gle masqu\u{e9}e. Les r\u{e8}gles masqu\u{e9}es depuis une carte appara\u{ee}tront ici.")
+    }
+    public var unmute: String          { pick("Unmute", "R\u{e9}afficher") }
+
+    public var blockedApplications: String {
+        pick("Never correct in these applications", "Ne jamais corriger dans ces applications")
+    }
+    public var blockedApplicationsHelp: String {
+        pick("\u{2325}\u{2318}C refuses to act in these. Password fields are always refused, everywhere.",
+             "\u{2325}\u{2318}C refuse d\u{2019}agir dans celles-ci. Les champs de mot de passe sont toujours refus\u{e9}s, partout.")
+    }
+    public var addApplication: String  { pick("Bundle identifier\u{2026}", "Identifiant de bundle\u{2026}") }
+    public var invalidBundleIdentifier: String {
+        pick("That does not look like a bundle identifier \u{2014} try com.apple.Terminal",
+             "Cela ne ressemble pas \u{e0} un identifiant de bundle \u{2014} essayez com.apple.Terminal")
+    }
+    public var shippedProtectionWarning: String {
+        pick("This one ships blocked for a reason: a shell runs what it is given.",
+             "Celle-ci est bloqu\u{e9}e par d\u{e9}faut pour une raison : un terminal ex\u{e9}cute ce qu\u{2019}on lui donne.")
+    }
+
+    // Updates
+    public var checkForUpdates: String { pick("Check for Updates\u{2026}", "Rechercher des mises \u{e0} jour\u{2026}") }
+    public var automaticUpdates: String {
+        pick("Check for updates automatically", "Rechercher les mises \u{e0} jour automatiquement")
+    }
+    /// Shown when the build has no feed or no public key, which is the state
+    /// of any build made before the release keys exist.
+    public var updatesNotConfigured: String {
+        pick("This build has no update feed.", "Cette version n\u{2019}a pas de flux de mise \u{e0} jour.")
+    }
+
     // Version
     public var version: String      { pick("version", "version") }
     public var whatsNew: String     { pick("What’s new", "Nouveautés") }

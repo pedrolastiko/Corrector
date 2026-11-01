@@ -14,6 +14,10 @@ import CorrectorAppCore
 @main
 struct CorrectorAppMain: App {
     @StateObject private var model = DocumentModel.shared
+    @StateObject private var updater = Updater()
+    /// One instance for the whole app: the menu and the settings window must
+    /// not disagree about whether Corrector opens at login.
+    @StateObject private var login = LoginItemModel()
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var delegate
 
     var body: some Scene {
@@ -38,6 +42,11 @@ struct CorrectorAppMain: App {
                 Button(model.strings.copy) { model.copySelection() }
                     .keyboardShortcut("c", modifiers: [.command, .shift])
             }
+            CommandGroup(after: .appInfo) {
+                if updater.isConfigured {
+                    Button(model.strings.checkForUpdates) { updater.checkForUpdates() }
+                }
+            }
             CommandMenu(model.strings.checkMenu) {
                 Button(model.strings.checkNow) { model.checkNow() }
                     .keyboardShortcut("r")
@@ -46,8 +55,12 @@ struct CorrectorAppMain: App {
             }
         }
 
+        Settings {
+            SettingsView(model: model, updater: updater, login: login)
+        }
+
         MenuBarExtra {
-            MenuBarPanel(model: model)
+            MenuBarPanel(model: model, login: login)
         } label: {
             Label("\(model.scores.generalScore)", systemImage: "checkmark.seal")
         }
@@ -69,7 +82,7 @@ private struct MenuBarPanel: View {
     @ObservedObject var model: DocumentModel
     /// Re-read from the system each time the menu opens: the user can revoke
     /// a login item in System Settings while the app is running.
-    @StateObject private var login = LoginItemModel()
+    @ObservedObject var login: LoginItemModel
     @Environment(\.openWindow) private var openWindow
 
     var body: some View {
@@ -96,6 +109,7 @@ private struct MenuBarPanel: View {
             .disabled(!model.alerts.contains { !$0.replacements.isEmpty })
         Divider()
         loginItemEntry
+        Button(model.strings.settings) { AppDelegate.showSettings() }
         Divider()
         Button(model.strings.quit) { NSApplication.shared.terminate(nil) }
     }
@@ -404,6 +418,24 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     /// Bring the document window forward, reopening it if it was closed.
+    /// Open the settings window.
+    ///
+    /// `SettingsLink` would be one line, and needs macOS 14 — this package
+    /// targets 13. The selector behind it was renamed between the two
+    /// releases, so both are tried: `showSettingsWindow:` on 14 and later,
+    /// `showPreferencesWindow:` before it. Sending an unrecognised selector
+    /// is a no-op rather than a crash, so the order is simply newest first.
+    static func showSettings() {
+        NSApp.activate(ignoringOtherApps: true)
+        let modern = Selector(("showSettingsWindow:"))
+        let legacy = Selector(("showPreferencesWindow:"))
+        if NSApp.responds(to: modern) {
+            NSApp.sendAction(modern, to: nil, from: nil)
+        } else {
+            NSApp.sendAction(legacy, to: nil, from: nil)
+        }
+    }
+
     static func showMainWindow() {
         let app = NSApplication.shared
         if let window = app.windows.first(where: { $0.canBecomeMain }) {

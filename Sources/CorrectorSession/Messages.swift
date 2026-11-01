@@ -118,5 +118,5 @@ public enum SessionError: Error, Equatable, Sendable {
 public enum CorrectorVersion {
     /// Sent as `clientVersion` in the handshake. `Release` in the app layer
     /// reads this rather than carrying its own copy.
-    public static let current = "0.5.1-beta"
+    public static let current = "5.1.2-beta"
 }
