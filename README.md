@@ -3,7 +3,7 @@
   <h1>Corrector</h1>
   <p><b>Proofreading that never leaves your Mac.</b></p>
   <p>
-    <a href="https://github.com/pedrolastiko/Corrector/releases/latest"><img src="https://img.shields.io/badge/download-0.5%20beta-2E8B7A?style=flat-square" alt="download"></a>
+    <a href="https://github.com/pedrolastiko/Corrector/releases/latest"><img src="https://img.shields.io/badge/download-0.5.1%20beta-2E8B7A?style=flat-square" alt="download"></a>
     <img src="https://img.shields.io/badge/platform-macOS%2013%2B-2F3640?style=flat-square" alt="platform">
     <img src="https://img.shields.io/badge/swift-6.0-F05138?style=flat-square" alt="swift">
     <img src="https://img.shields.io/badge/tests-257%20passing-2E8B7A?style=flat-square" alt="tests">
@@ -20,7 +20,7 @@ rules you can read. There is no account, no sign-in, no telemetry, and no
 network code anywhere in the project.
 
 > [!NOTE]
-> Corrector is in **beta 0.5**. The build is signed but **not notarised**, so
+> Corrector is in **beta 0.5.1**. The build is signed but **not notarised**, so
 > the first launch needs a right-click → **Open** → **Open**. After that it
 > opens normally.
 
@@ -34,7 +34,7 @@ network code anywhere in the project.
 
 ### Download
 
-Grab [**Corrector 0.5 beta**](https://github.com/pedrolastiko/Corrector/releases/latest)
+Grab [**Corrector 0.5.1 beta**](https://github.com/pedrolastiko/Corrector/releases/latest)
 (2.9 MB, universal — Apple silicon and Intel), unzip it, and move
 **Corrector.app** to your Applications folder.
 
@@ -104,6 +104,7 @@ Services menu, where you can see what changed.
 - [x] Clarity: wordiness, passive voice, nominalisation, long sentences
 - [x] Engagement, style guide and inclusive language
 - [x] Readability, reading time and speaking time
+- [x] A one-click clear, with thirty seconds to take it back
 - [x] 14 rule plugins — seven per language — each one switchable on its own
 
 **Languages**

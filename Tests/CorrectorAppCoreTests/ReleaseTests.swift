@@ -5,7 +5,7 @@ import XCTest
 final class ReleaseTests: XCTestCase {
 
     func testTheDisplayedVersionIsBuiltFromItsParts() {
-        XCTAssertEqual(Release.display, "beta 0.5")
+        XCTAssertEqual(Release.display, "beta 0.5.1")
         XCTAssertFalse(Release.version.isEmpty)
     }
 
@@ -25,9 +25,14 @@ final class ReleaseTests: XCTestCase {
                       "\(Release.protocolVersion) does not mention the \(Release.stage) stage")
     }
 
-    func testThereAreNotesOfBothKinds() {
-        XCTAssertTrue(Release.notes.contains { $0.kind == .feature })
-        XCTAssertTrue(Release.notes.contains { $0.kind == .fix })
+    func testThereIsAtLeastOneNote() {
+        // Not "one of each kind", which is what this asserted until 0.5.1
+        // turned out to be all features and no fixes. A release is allowed to
+        // be entirely one or the other; what it may not be is silent.
+        XCTAssertFalse(Release.notes.isEmpty)
+        for note in Release.notes {
+            XCTAssertFalse(note.kind.symbol.isEmpty)
+        }
     }
 
     func testEveryNoteIsWrittenInBothLanguages() {

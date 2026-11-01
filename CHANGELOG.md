@@ -4,6 +4,22 @@ Corrector follows its single source of truth: the version shown in the app's
 footer comes from `Sources/CorrectorAppCore/Release.swift`, and the release
 notes in the hover panel are the same list as the one below.
 
+## 0.5.1 — beta
+
+[Download](https://github.com/pedrolastiko/Corrector/releases/tag/v0.5.1-beta)
+(universal binary, Apple silicon and Intel).
+
+### New
+
+- **A button in the toolbar clears the document**, beside Copy. Disabled while
+  the document is already empty.
+- **The clear can be taken back for thirty seconds.** The same button turns
+  into an undo arrow and puts the text back. This is not a convenience: text
+  replaced programmatically never enters the text view's own undo stack, so
+  ⌘Z does not undo a clear and nothing else would have.
+
+---
+
 ## 0.5 — beta
 
 First public release —

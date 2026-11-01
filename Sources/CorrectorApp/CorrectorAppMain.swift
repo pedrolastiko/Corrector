@@ -289,7 +289,11 @@ struct ReleaseNotesView: View {
 
             Divider()
 
-            section(strings.newFeatures, features)
+            // Both guarded: a release can be all features or all fixes, and
+            // a heading with nothing under it reads like a bug.
+            if !features.isEmpty {
+                section(strings.newFeatures, features)
+            }
             if !fixes.isEmpty {
                 section(strings.bugFixes, fixes)
             }
