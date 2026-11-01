@@ -96,6 +96,20 @@ public struct Strings {
 
     public var copy: String          { pick("Copy to Clipboard", "Copier dans le presse-papiers") }
     public var clear: String         { pick("Clear", "Effacer") }
+
+    // Login item
+    public var openAtLogin: String { pick("Open at Login", "Ouvrir au démarrage") }
+    /// Shown instead of a tick when macOS has the registration but the user
+    /// has not allowed it. Clicking opens the pane where they can.
+    public var loginNeedsApproval: String {
+        pick("Allow at login in System Settings…",
+             "Autoriser au démarrage dans Réglages…")
+    }
+    /// Shown when the system will not register this bundle at all.
+    public var loginUnavailable: String {
+        pick("Open at Login (unavailable from this folder)",
+             "Ouvrir au démarrage (indisponible depuis ce dossier)")
+    }
     /// The same button after a clear. Offering the way back is what makes a
     /// one-click destructive action reasonable in a toolbar.
     public var undoClear: String     { pick("Undo clear", "Annuler l’effacement") }

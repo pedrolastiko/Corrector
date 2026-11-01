@@ -10,6 +10,20 @@ final class StringsTests: XCTestCase {
     private let en = Strings(locale: .english)
     private let fr = Strings(locale: .french)
 
+    // MARK: - Login item
+
+    func testTheLoginStringsAreTranslatedAndDistinct() {
+        XCTAssertEqual(en.openAtLogin, "Open at Login")
+        XCTAssertEqual(fr.openAtLogin, "Ouvrir au d\u{e9}marrage")
+        for strings in [en, fr] {
+            // Three states, three messages: if any two collided the menu
+            // could not tell the user which one they are in.
+            XCTAssertNotEqual(strings.openAtLogin, strings.loginNeedsApproval)
+            XCTAssertNotEqual(strings.openAtLogin, strings.loginUnavailable)
+            XCTAssertNotEqual(strings.loginNeedsApproval, strings.loginUnavailable)
+        }
+    }
+
     // MARK: - Clear
 
     func testClearAndItsUndoAreTranslated() {

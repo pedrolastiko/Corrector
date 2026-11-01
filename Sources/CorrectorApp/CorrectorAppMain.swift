@@ -67,6 +67,9 @@ struct CorrectorAppMain: App {
 
 private struct MenuBarPanel: View {
     @ObservedObject var model: DocumentModel
+    /// Re-read from the system each time the menu opens: the user can revoke
+    /// a login item in System Settings while the app is running.
+    @StateObject private var login = LoginItemModel()
     @Environment(\.openWindow) private var openWindow
 
     var body: some View {
@@ -76,6 +79,9 @@ private struct MenuBarPanel: View {
             openWindow(id: CorrectorAppMain.mainWindowID)
             AppDelegate.showMainWindow()
         }
+            // The system owns this setting, so ask it again every time the
+            // menu is shown rather than trusting what we saw at launch.
+            .onAppear { login.refresh() }
         Divider()
         if let status = model.status {
             Text(status)
@@ -89,7 +95,28 @@ private struct MenuBarPanel: View {
         Button(model.strings.acceptAll) { model.acceptAll() }
             .disabled(!model.alerts.contains { !$0.replacements.isEmpty })
         Divider()
+        loginItemEntry
+        Divider()
         Button(model.strings.quit) { NSApplication.shared.terminate(nil) }
+    }
+
+    /// One entry, three faces, because the system has three answers and only
+    /// one of them is a yes/no.
+    @ViewBuilder
+    private var loginItemEntry: some View {
+        switch login.state {
+        case .on, .off:
+            Toggle(model.strings.openAtLogin,
+                   isOn: Binding(get: { LoginItem.isOn(login.state) },
+                                 set: { _ in login.activate() }))
+        case .needsApproval:
+            Button(model.strings.loginNeedsApproval) { login.activate() }
+        case .unavailable:
+            Text(model.strings.loginUnavailable)
+        }
+        if let failure = login.failure {
+            Text(failure)
+        }
     }
 }
 
