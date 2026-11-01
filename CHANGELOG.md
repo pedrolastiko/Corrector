@@ -17,6 +17,11 @@ notes in the hover panel are the same list as the one below.
   into an undo arrow and puts the text back. This is not a convenience: text
   replaced programmatically never enters the text view's own undo stack, so
   ⌘Z does not undo a clear and nothing else would have.
+- **Corrector can open at login**, from the menu-bar menu. The setting lives
+  with macOS, in System Settings → General → Login Items, so it can be revoked
+  without the app running and the menu always shows what the system actually
+  reports — including the state where macOS has the registration but is
+  waiting for your approval.
 
 ---
 

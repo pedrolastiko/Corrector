@@ -35,8 +35,8 @@ network code anywhere in the project.
 ### Download
 
 Grab [**Corrector 0.5.1 beta**](https://github.com/pedrolastiko/Corrector/releases/latest)
-(2.9 MB, universal — Apple silicon and Intel), unzip it, and move
-**Corrector.app** to your Applications folder.
+— the `.dmg` (3.3 MB), or the `.zip` if you prefer. Both are universal, Apple
+silicon and Intel. Open the image and drag **Corrector** onto **Applications**.
 
 The first launch needs a **right-click → Open → Open**: the build is ad-hoc
 signed rather than notarised, so macOS blocks a plain double-click once.
@@ -105,6 +105,7 @@ Services menu, where you can see what changed.
 - [x] Engagement, style guide and inclusive language
 - [x] Readability, reading time and speaking time
 - [x] A one-click clear, with thirty seconds to take it back
+- [x] Opens at login, if you ask it to
 - [x] 14 rule plugins — seven per language — each one switchable on its own
 
 **Languages**

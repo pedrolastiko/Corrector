@@ -71,5 +71,14 @@ public enum Release {
                    + "même bouton devient une flèche de retour et remet le "
                    + "texte. Rien d’autre ne le rattrape — ⌘Z n’annule pas un "
                    + "effacement."),
+        Note(id: 3, kind: .feature,
+             english: "Corrector can open at login, from the menu-bar menu. "
+                    + "macOS keeps the switch in System Settings > General > "
+                    + "Login Items, so it can be revoked without the app "
+                    + "running.",
+             french: "Corrector peut s’ouvrir au démarrage, depuis le menu de "
+                   + "la barre de menus. macOS conserve le réglage dans "
+                   + "Réglages > Général > Ouverture, où il peut être révoqué "
+                   + "sans lancer l’application."),
     ]
 }
