@@ -6,7 +6,12 @@ notes in the hover panel are the same list as the one below.
 
 ## 0.5 — beta
 
-First public release.
+First public release —
+[download](https://github.com/pedrolastiko/Corrector/releases/tag/v0.5.0-beta)
+(universal binary, Apple silicon and Intel).
+
+The build is ad-hoc signed and not notarised, so the first launch needs a
+right-click → **Open** → **Open**.
 
 ### What it does
 

@@ -3,6 +3,7 @@
   <h1>Corrector</h1>
   <p><b>Proofreading that never leaves your Mac.</b></p>
   <p>
+    <a href="https://github.com/pedrolastiko/Corrector/releases/latest"><img src="https://img.shields.io/badge/download-0.5%20beta-2E8B7A?style=flat-square" alt="download"></a>
     <img src="https://img.shields.io/badge/platform-macOS%2013%2B-2F3640?style=flat-square" alt="platform">
     <img src="https://img.shields.io/badge/swift-6.0-F05138?style=flat-square" alt="swift">
     <img src="https://img.shields.io/badge/tests-257%20passing-2E8B7A?style=flat-square" alt="tests">
@@ -19,8 +20,9 @@ rules you can read. There is no account, no sign-in, no telemetry, and no
 network code anywhere in the project.
 
 > [!NOTE]
-> Corrector is in **beta 0.5**. There is no notarised release yet, so it is
-> built from source — one command, no dependencies to fetch.
+> Corrector is in **beta 0.5**. The build is signed but **not notarised**, so
+> the first launch needs a right-click → **Open** → **Open**. After that it
+> opens normally.
 
 <div align="center">
   <img src="Assets/screenshots/main.png" width="860" alt="The Corrector window: document on the left with suggestions underlined, cards and scores on the right">
@@ -29,6 +31,17 @@ network code anywhere in the project.
 ---
 
 ## Install
+
+### Download
+
+Grab [**Corrector 0.5 beta**](https://github.com/pedrolastiko/Corrector/releases/latest)
+(2.9 MB, universal — Apple silicon and Intel), unzip it, and move
+**Corrector.app** to your Applications folder.
+
+The first launch needs a **right-click → Open → Open**: the build is ad-hoc
+signed rather than notarised, so macOS blocks a plain double-click once.
+
+### Or build it
 
 ```bash
 git clone https://github.com/pedrolastiko/Corrector.git
