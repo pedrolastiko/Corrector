@@ -259,6 +259,51 @@ final class DocumentModel: ObservableObject {
         persist()
     }
 
+    /// Text put aside by `clearDocument`, and the task that will forget it.
+    ///
+    /// Clearing is one click away from a document someone may have been
+    /// writing for an hour, and pushing text programmatically does not reach
+    /// the text view's own undo stack — so without this, the toolbar would
+    /// offer a destructive action with no way back.
+    ///
+    /// Thirty seconds, not ten: the first version used ten and the first test
+    /// of it missed the window while the tester was still looking at the empty
+    /// document working out what had happened. Someone who clears by mistake
+    /// needs time to notice, not a reflex. Holding the text costs nothing —
+    /// there is nothing to clear while the document is empty, so the button
+    /// has no other job during the wait.
+    private var clearedText: String?
+    private var forgetClearedTask: Task<Void, Never>?
+
+    /// Whether the last clear can still be taken back.
+    @Published private(set) var canUndoClear = false
+
+    func clearDocument() {
+        guard !text.isEmpty else { return }
+        let previous = text
+        startSession(with: "")
+        persist()
+
+        clearedText = previous
+        canUndoClear = true
+        forgetClearedTask?.cancel()
+        forgetClearedTask = Task { [weak self] in
+            try? await Task.sleep(for: .seconds(30))
+            guard !Task.isCancelled else { return }
+            self?.clearedText = nil
+            self?.canUndoClear = false
+        }
+    }
+
+    func undoClear() {
+        guard let previous = clearedText else { return }
+        forgetClearedTask?.cancel()
+        clearedText = nil
+        canUndoClear = false
+        startSession(with: previous)
+        persist()
+    }
+
     /// Replace the whole document, e.g. with a selection arriving from a
     /// Service. Starts a fresh session because the incoming text has nothing
     /// to do with the previous revision history.

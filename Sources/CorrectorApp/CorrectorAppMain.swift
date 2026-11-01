@@ -179,6 +179,18 @@ struct ContentView: View {
                         : model.strings.copySelection)
                 .disabled(model.text.isEmpty)
 
+                // Clearing and taking it back share one button, so the way
+                // out of a mistaken click is where the click just happened
+                // rather than in a menu the user has to go looking for.
+                Button {
+                    if model.canUndoClear { model.undoClear() } else { model.clearDocument() }
+                } label: {
+                    Label(model.canUndoClear ? model.strings.undoClear : model.strings.clear,
+                          systemImage: model.canUndoClear ? "arrow.uturn.backward" : "trash")
+                }
+                .help(model.canUndoClear ? model.strings.undoClear : model.strings.clear)
+                .disabled(model.text.isEmpty && !model.canUndoClear)
+
                 Button {
                     model.acceptAll()
                 } label: {

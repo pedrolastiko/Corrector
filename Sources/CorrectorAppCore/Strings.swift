@@ -95,6 +95,10 @@ public struct Strings {
     public var deleteReplacement: String { pick("(delete)", "(supprimer)") }
 
     public var copy: String          { pick("Copy to Clipboard", "Copier dans le presse-papiers") }
+    public var clear: String         { pick("Clear", "Effacer") }
+    /// The same button after a clear. Offering the way back is what makes a
+    /// one-click destructive action reasonable in a toolbar.
+    public var undoClear: String     { pick("Undo clear", "Annuler l’effacement") }
     public var copySelection: String { pick("Copy Selection", "Copier la sélection") }
     public var copyAll: String       { pick("Copy All", "Tout copier") }
     public var copied: String        { pick("Copied", "Copié") }

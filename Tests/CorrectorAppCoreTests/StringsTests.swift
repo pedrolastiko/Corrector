@@ -10,6 +10,23 @@ final class StringsTests: XCTestCase {
     private let en = Strings(locale: .english)
     private let fr = Strings(locale: .french)
 
+    // MARK: - Clear
+
+    func testClearAndItsUndoAreTranslated() {
+        XCTAssertEqual(en.clear, "Clear")
+        XCTAssertEqual(fr.clear, "Effacer")
+        XCTAssertEqual(en.undoClear, "Undo clear")
+        XCTAssertEqual(fr.undoClear, "Annuler l\u{2019}effacement")
+    }
+
+    func testTheClearButtonsTwoStatesAreNeverTheSameWord() {
+        // The button carries both labels; if they ever collided, a user could
+        // not tell whether the next click destroys or restores.
+        for strings in [en, fr] {
+            XCTAssertNotEqual(strings.clear, strings.undoClear)
+        }
+    }
+
     // MARK: - Agreement
 
     func testCountsAgreeWithTheirNoun() {
