@@ -1,0 +1,12 @@
+# Build artefacts
+.build/
+dist/
+Assets/Corrector.iconset/
+.DS_Store
+
+# Generated icon binaries — reproducible with Tools/make-icon.swift.
+# The 128pt PNG is kept: the README embeds it, and an ignored image is a
+# broken image once the repository is on GitHub.
+Assets/*.icns
+Assets/*.png
+!Assets/corrector-icon.png

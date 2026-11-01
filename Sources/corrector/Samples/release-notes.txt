@@ -1,0 +1,11 @@
+Release 4.2 is now availible.
+
+We have made a decision to deprecate the legacy whitelist API. Prior to this
+release, every policeman of the system had to be configured by hand, which was
+quite slow and really very tedious for the operators who had to do it one at a
+time across a large number of machines in order to keep the fleet consistent.
+
+The new allow-based flow is simply faster. It is actually much simpler too.
+It basically removes three steps.
+
+Please update your integration before the deprecation date

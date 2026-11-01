@@ -1,0 +1,5 @@
+The deployment finished at noon. We rolled the change out to twelve regions,
+watched the error rate for an hour, and found nothing unusual.
+
+Priya wrote the migration guide. It covers the three breaking changes and
+links to the sample project.
