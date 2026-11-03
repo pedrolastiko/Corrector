@@ -32,6 +32,7 @@ public enum AlertPname: String, Codable, Sendable, CaseIterable {
     case pallierA
     case frenchSpacing
     case frenchQuotes
+    case spaceAfterApostrophe
     case typographicApostrophe
     case etcEllipsis
 }
@@ -156,8 +157,8 @@ public struct Alert: Equatable, Hashable, Codable, Sendable, Identifiable {
     }
 
     public var isPunctuation: Bool {
-        [.doubleSpace, .spaceBeforePunctuation, .missingTerminalPunctuation, .oxfordComma]
-            .contains(pname)
+        [.doubleSpace, .spaceBeforePunctuation, .missingTerminalPunctuation,
+         .oxfordComma, .spaceAfterApostrophe].contains(pname)
     }
 
     public var isPassiveVoiceAlert: Bool { pname == .passiveVoice }

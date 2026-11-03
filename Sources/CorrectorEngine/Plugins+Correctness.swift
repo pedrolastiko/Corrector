@@ -215,23 +215,10 @@ public struct PunctuationPlugin: CheckPlugin {
             return Character(UnicodeScalar(units[i]) ?? " ")
         }
 
-        // Two or more spaces between words.
-        var index = 0
-        while index < units.count {
-            guard char(index) == " " else { index += 1; continue }
-            var run = index
-            while run < units.count, char(run) == " " { run += 1 }
-            if run - index >= 2 {
-                drafts.append(AlertDraft(
-                    begin: index, end: run,
-                    title: "Extra space",
-                    details: "Collapse \(run - index) spaces to one.",
-                    explanation: "Modern typesetting uses a single space between sentences.",
-                    pname: .doubleSpace, outcome: .correctness,
-                    replacements: [" "]))
-            }
-            index = run
-        }
+        // Runs of spaces are checked by `Spacing`, which French shares. The
+        // rules below cannot be shared: French requires the space this one
+        // removes.
+        drafts.append(contentsOf: Spacing.collapsibleRuns(in: context))
 
         // Space before,.;: ! ?
         for i in 0..<units.count {

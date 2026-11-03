@@ -26,6 +26,21 @@ notes in the hover panel are the same list as the one below.
   doors.** Both buttons wrote to a store nothing could read back, so a wrong
   click could not be undone from inside the app. Both are now reversible in
   the settings window, and the document is re-checked immediately.
+- **Double spaces are caught in French.** They never were. The rule that
+  collapses a run of spaces lived inside the English punctuation plugin, which
+  is English-only for a sound reason — it also flags the space before `!`, and
+  French requires that space. Collapsing a run was never English-specific and
+  had inherited the restriction by accident. It now lives in `Spacing`, which
+  both languages call, so no French document goes unchecked for it again.
+- **A run of spaces before `;` `!` `?` `:` in French becomes one non-breaking
+  space, in a single step.** Collapsing it to an ordinary space first would
+  have left an error behind, so the typography rule claims the whole run
+  rather than only its last space.
+- **A space after the apostrophe of elision is reported** — « l' application »
+  → « l'application ». The rule fires only after a word that genuinely elides
+  (`l'`, `d'`, `qu'`, `aujourd'`…) and only at a word boundary. Without that
+  test it would mangle an English plural possessive — "the dogs' owners" has
+  exactly the same shape — and any closing single quote.
 
 ### Note on dependencies
 

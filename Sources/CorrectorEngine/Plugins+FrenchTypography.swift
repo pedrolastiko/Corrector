@@ -21,8 +21,69 @@ public struct FrenchTypographyPlugin: CheckPlugin {
     private static let narrow: Set<Character> = [";", "!", "?"]
     private static let wide: Set<Character> = [":"]
 
-    public func check(_ context: CheckContext) -> [AlertDraft] {
+    /// The forms that actually elide.
+    ///
+    /// Required, not decoration. Without it the rule below is "an apostrophe
+    /// followed by a space is wrong", which is false in both languages: an
+    /// English plural possessive ("the dogs' owners") and any closing single
+    /// quote are exactly that shape. Matching the word in front, and demanding
+    /// that it begin at a word boundary, is what separates « l' ami » — where
+    /// the space is a typing slip — from « les chats' » where it is not.
+    private static let elidable: Set<String> = [
+        "c", "d", "j", "l", "m", "n", "s", "t", "qu",
+        "jusqu", "lorsqu", "puisqu", "quoiqu", "presqu", "quelqu", "aujourd",
+    ]
+
+    /// « l' application » → « l'application ».
+    ///
+    /// The apostrophe of elision binds the two words into one; a space after
+    /// it is never correct. The draft removes the spaces and leaves the
+    /// apostrophe itself alone, so a straight `'` is still the typographic
+    /// rule's business and stays mutable on its own.
+    private func elisionSpacing(_ context: CheckContext) -> [AlertDraft] {
+        let units = Array(context.text.utf16)
+        func character(at index: Int) -> Character? {
+            guard index >= 0, index < units.count,
+                  let scalar = UnicodeScalar(units[index]) else { return nil }
+            return Character(scalar)
+        }
+
         var drafts: [AlertDraft] = []
+        for index in 0..<units.count {
+            guard let mark = character(at: index),
+                  mark == "\u{0027}" || mark == "\u{2019}" else { continue }
+
+            // Spaces to drop, and a word on the far side of them.
+            var run = index + 1
+            while run < units.count, character(at: run) == " " { run += 1 }
+            guard run > index + 1,
+                  let following = character(at: run), following.isLetter else { continue }
+
+            // The elidable form in front, starting at a word boundary.
+            var start = index
+            while start > 0, let before = character(at: start - 1),
+                  before.isLetter { start -= 1 }
+            let word = String(decoding: units[start..<index], as: UTF16.self).lowercased()
+            guard Self.elidable.contains(word) else { continue }
+
+            let elided = String(decoding: units[start..<(index + 1)], as: UTF16.self)
+            drafts.append(AlertDraft(
+                begin: index + 1, end: run,
+                highlightBegin: start, highlightEnd: min(units.count, run + 1),
+                title: "Espace après l'apostrophe",
+                details: "« \(elided) \(following)… » → « \(elided)\(following)… »",
+                explanation: "L'apostrophe d'élision soude les deux mots: "
+                           + "elle n'est jamais suivie d'une espace.",
+                examples: ["l'application", "qu'il", "aujourd'hui"],
+                pname: .spaceAfterApostrophe, outcome: .correctness,
+                replacements: [""]))
+        }
+        return drafts
+    }
+
+    public func check(_ context: CheckContext) -> [AlertDraft] {
+        var drafts = Spacing.collapsibleRuns(in: context)
+        drafts.append(contentsOf: elisionSpacing(context))
         let units = Array(context.text.utf16)
 
         func character(at index: Int) -> Character? {
@@ -74,10 +135,20 @@ public struct FrenchTypographyPlugin: CheckPlugin {
                 }
             } else if previous == " " {
                 // A breaking space: the mark could end up alone on a new line.
+                //
+                // The whole run goes, not just the last one. « mot  ! » typed
+                // with two spaces has to come back as « mot ! » in one accept;
+                // replacing only the final space would leave an ordinary one
+                // in front of the mark, which is the error we started from.
+                var start = index - 1
+                while start > 0, character(at: start - 1) == " " { start -= 1 }
+                let extra = index - start > 1
                 drafts.append(AlertDraft(
-                    begin: index - 1, end: index,
-                    highlightBegin: max(0, index - 1), highlightEnd: index + 1,
-                    title: "Espace sécable avant « \(mark) »",
+                    begin: start, end: index,
+                    highlightBegin: max(0, start), highlightEnd: index + 1,
+                    title: extra
+                        ? "Espaces multiples avant « \(mark) »"
+                        : "Espace sécable avant « \(mark) »",
                     details: "Remplacez par une \(label).",
                     explanation: "Une espace ordinaire autorise un retour à la ligne "
                                + "qui laisserait « \(mark) » seul en début de ligne.",

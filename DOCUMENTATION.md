@@ -170,6 +170,15 @@ requires and English forbids. The same input is an error in one language and
 correct in the other, which is why `CheckPlugin` declares the languages it
 understands and the engine skips the rest.
 
+That separation has one trap, and Corrector fell into it: a rule that *is*
+language-neutral must not be filed inside a plugin that is not. Collapsing a
+run of spaces applies to both languages, but it had been written inside the
+English punctuation plugin — which is English-only because it also flags the
+space before `!`. French documents therefore went unchecked for double spaces
+entirely, from the first release until 5.1.2. The shared part now lives in
+`Spacing`, which both plugins call, so every registered plugin still belongs
+to exactly one language and `CheckPlugin.languages` keeps meaning one thing.
+
 `--dialect auto` (the default) picks the language from the text's function
 words and accents. In the app, the toolbar has a dialect picker grouped by
 language and a separate **Interface** picker; the status bar names the language

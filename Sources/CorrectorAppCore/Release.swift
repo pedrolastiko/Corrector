@@ -79,5 +79,22 @@ public enum Release {
              french: "Ajouter un mot au dictionnaire ou masquer une r\u{e8}gle "
                    + "n\u{2019}est plus sans retour : les deux se d\u{e9}font depuis la "
                    + "fen\u{ea}tre de r\u{e9}glages."),
+        Note(id: 4, kind: .fix,
+             english: "Double spaces are now caught in French. The rule had "
+                    + "been written inside the English punctuation plugin, so "
+                    + "a French document was never checked for them at all.",
+             french: "Les espaces multiples sont enfin signal\u{e9}es en fran\u{e7}ais. "
+                   + "La r\u{e8}gle vivait dans le greffon de ponctuation anglaise : "
+                   + "un texte fran\u{e7}ais n\u{2019}\u{e9}tait tout simplement jamais "
+                   + "v\u{e9}rifi\u{e9}."),
+        Note(id: 5, kind: .fix,
+             english: "A space after the apostrophe of elision \u{2014} "
+                    + "\u{ab}\u{a0}l\u{2019} application\u{a0}\u{bb} \u{2014} is now "
+                    + "reported. Only after a word that really elides, so an "
+                    + "English plural possessive is left alone.",
+             french: "L\u{2019}espace apr\u{e8}s une apostrophe d\u{2019}\u{e9}lision "
+                   + "\u{2014} \u{ab}\u{a0}l\u{2019} application\u{a0}\u{bb} \u{2014} est "
+                   + "d\u{e9}sormais signal\u{e9}e, uniquement apr\u{e8}s un mot qui "
+                   + "s\u{2019}\u{e9}lide vraiment."),
     ]
 }
